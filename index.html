@@ -86,55 +86,41 @@
 </section>
 
    <!-- choose your tree -->
-    <!-- <section class=" h-900 bg-green-50">
-         
-    </section> -->
-     <!-- <section class="bg-green-50 py-10">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-10 text-gray-800">Choose Your Tree</h2>
-        <div id="category-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            </div>
-    </div>
-    <div>
-      <div class="ml-6 ">
-        <div class=" ">
-        <h2 class="font-bold mb-2 ">Categories</h2>
-        <p class="mb-2">All Trees</p>
-        <p class="mb-2">Fruit Trees</p>
-        </div>
-      </div>
-    </div>
-</section>
-    -->
+    
    <section class="bg-green-50 py-10">
   <div class="container mx-auto px-4 flex flex-col lg:flex-row justify-center gap-6">
-    <!-- Left Sidebar -->
-    <div class="w-full lg:w-1/4">
-      <h2 class="font-bold text-lg mb-4 text-gray-800">Categories</h2>
-      <p class="mb-2 hover:bg-green-500 text-black font-semibold px-4 py-2 rounded cursor-pointer transition duration-200">All Trees</p>
-      <ul id="category-container" class="space-y-2 text-black">
-        <!-- Dynamic categories will appear here -->
-      </ul>
+    
+    <div class="w-full lg:w-3/4 flex flex-col md:flex-row gap-6">
+      
+      <div class="w-full md:w-1/4">
+        <h2 class="font-bold text-lg mb-4 text-gray-800">Categories</h2>
+        <!-- <p class="mb-2 hover:bg-green-500 text-black font-semibold px-4 py-2 rounded cursor-pointer transition duration-200">All Trees</p> -->
+        <ul id="category-container" class="space-y-2 text-black">
+          <li>Ornamental Plant</li>
+           <li>Bamboo</li>
+           <li>Climber</li>
+           <li>Aquatic Plant</li>
+        </ul>
+      </div>
+
+      <div id="plant-container" class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        </div>
+
     </div>
 
-    <!-- Plant Cards -->
-    <div id="plant-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-3 w-full">
-      <!-- Dynamic plant cards will be injected here -->
-    </div>
-
-    <!-- Right Sidebar (Cart) -->
     <div class="bg-white p-3 rounded-xl w-full lg:w-1/4">
       <h1 class="font-bold">Your Cart</h1>
-      <div class="flex justify-between items-center bg-green-50 p-2 gap-2">
+      <div class="flex justify-between items-center bg-green-50 p-2 gap-2 mt-4">
         <div>
           <h4 class="font-bold">Mango Tree</h4>
           <p class="text-gray-500"><i class="fa-solid fa-bangladeshi-taka-sign"></i>500 <span>x 1</span></p>
         </div>
         <div>
-          <i class="fa-solid fa-x text-gray-400"></i>
-        </div> 
+          <i class="fa-solid fa-x text-gray-400 cursor-pointer"></i>
+        </div>
       </div>
     </div>
+
   </div>
 </section>           
    
