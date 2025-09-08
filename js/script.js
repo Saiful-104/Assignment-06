@@ -84,7 +84,7 @@ function updateCartUI() {
     cartContainer.appendChild(div);
   });
 
-  cartTotalEl.innerHTML = `<i class="fa-solid fa-bangladeshi-taka-sign"></i> <span class="font-semibold">${total}</span>`;
+  cartTotalEl.innerHTML = `<i class="fa-solid fa-bangladeshi-taka-sign"></i> <span class="font-semibold">${total}</span>  `;
 }
 
 // --- Normalize API response ---
