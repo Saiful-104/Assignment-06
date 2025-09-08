@@ -6,7 +6,9 @@ let cart = []; // store cart items
 
 // --- render plant cards ---
 function renderPlants(plants) {
-  plantContainer.innerHTML = ''; // clear first
+  // Remove spinner first
+  plantContainer.innerHTML = '';
+
   if (!plants || plants.length === 0) {
     plantContainer.innerHTML = '<p class="p-4 text-center text-gray-500">No plants found.</p>';
     return;
@@ -42,15 +44,11 @@ function renderPlants(plants) {
       </div>
     `;
 
-    // --- Add to Cart ---
     const addToCartBtn = card.querySelector('button');
     addToCartBtn.addEventListener('click', () => {
       const existing = cart.find(item => item.id === pid);
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({ id: pid, name: name, price: price, quantity: 1 });
-      }
+      if (existing) existing.quantity += 1;
+      else cart.push({ id: pid, name, price, quantity: 1 });
       updateCartUI();
     });
 
@@ -86,8 +84,7 @@ function updateCartUI() {
     cartContainer.appendChild(div);
   });
 
-  // Update total with Taka icon
-  cartTotalEl.innerHTML = `<i class="fa-solid fa-bangladeshi-taka-sign"></i>${total}`;
+  cartTotalEl.innerHTML = `<i class="fa-solid fa-bangladeshi-taka-sign"></i> <span class="font-semibold">${total}</span>`;
 }
 
 // --- Normalize API response ---
@@ -103,22 +100,50 @@ function normalizePlantsResponse(data) {
 
 // --- Load all plants ---
 function loadAllPlants() {
-  plantContainer.innerHTML = '<p class="p-4 text-center">Loading...</p>';
+  plantContainer.innerHTML = `
+    <div class="col-span-full flex justify-center mb-4">
+      <div class="flex space-x-2">
+        <span class="loading loading-ball loading-xs"></span>
+        <span class="loading loading-ball loading-sm"></span>
+        <span class="loading loading-ball loading-md"></span>
+        <span class="loading loading-ball loading-lg"></span>
+        <span class="loading loading-ball loading-xl"></span>
+      </div>
+    </div>
+  `;
+
   fetch('https://openapi.programming-hero.com/api/plants')
     .then(res => res.json())
-    .then(data => renderPlants(normalizePlantsResponse(data)))
+    .then(data => {
+      const arr = normalizePlantsResponse(data);
+      renderPlants(arr);
+    })
     .catch(err => {
       plantContainer.innerHTML = '<p class="p-4 text-center text-red-500">Failed to load plants.</p>';
       console.error(err);
     });
 }
 
-// --- Load category ---
+// --- Load plants by category id ---
 function loadCategory(id) {
-  plantContainer.innerHTML = '<p class="p-4 text-center">Loading...</p>';
+  plantContainer.innerHTML = `
+    <div class="col-span-full flex justify-center mb-4">
+      <div class="flex space-x-2">
+        <span class="loading loading-ball loading-xs"></span>
+        <span class="loading loading-ball loading-sm"></span>
+        <span class="loading loading-ball loading-md"></span>
+        <span class="loading loading-ball loading-lg"></span>
+        <span class="loading loading-ball loading-xl"></span>
+      </div>
+    </div>
+  `;
+
   fetch(`https://openapi.programming-hero.com/api/category/${encodeURIComponent(id)}`)
     .then(res => res.json())
-    .then(json => renderPlants(normalizePlantsResponse(json)))
+    .then(json => {
+      const arr = normalizePlantsResponse(json);
+      renderPlants(arr);
+    })
     .catch(err => {
       plantContainer.innerHTML = '<p class="p-4 text-center text-red-500">Failed to load category.</p>';
       console.error(err);
@@ -167,7 +192,7 @@ function loadCategories() {
   });
 }
 
-// ---------------- Modal ----------------
+// ---------------- Modal: fetch & show plant details ----------------
 function extractPlantObject(json) {
   const raw = json.plants;
   return Array.isArray(raw) ? raw[0] : raw;
@@ -179,7 +204,6 @@ function openPlantModal(id) {
   const container = document.getElementById('modal-content-container');
 
   container.innerHTML = `<div class="p-6 text-center"><p class="font-semibold">Loading...</p></div>`;
-
   if (typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute('open','');
 
@@ -211,5 +235,5 @@ plantContainer.addEventListener('click', e => {
   if (el) openPlantModal(el.getAttribute('data-id'));
 });
 
-// --- Start ---
+// ---------------- Start ----------------
 loadCategories();
