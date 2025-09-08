@@ -2,32 +2,33 @@ const categoryContainer = document.getElementById('category-container');
 const plantContainer = document.getElementById('plant-container');
 const cartContainer = document.getElementById('cart-items');
 const cartTotalEl = document.getElementById('cart-total');
-let cart = []; // store cart items
+let cart = []; 
 
-// --- render plant cards ---
+// render plant cards 
 function renderPlants(plants) {
-  // Remove spinner first
   plantContainer.innerHTML = '';
 
-  if (!plants || plants.length === 0) {
+  if ( plants.length === 0) {
     plantContainer.innerHTML = '<p class="p-4 text-center text-gray-500">No plants found.</p>';
     return;
   }
 
   plants.forEach(plant => {
-    const img = plant.image || plant.image_url || 'assets/about.png';
-    const name = plant.name || plant.plant_name || 'Unknown';
-    let desc = plant.description || plant.short_description || '';
-    const cat = plant.category || plant.category_name || 'Unknown';
-    const price = (plant.price !== undefined && plant.price !== null) ? plant.price : 0;
-    const pid = plant.id ?? plant._id ?? plant.plant_id ?? null;
+    const img = plant.image ;
+    const name = plant.name ;
+    let desc = plant.description ;
+    const cat = plant.category ;
+    const price = plant.price;
+    const pid = plant.id ;
 
     if (desc.length > 80) desc = desc.substring(0, 80) + '...';
 
     const card = document.createElement('div');
     card.className = "w-full h-[420px] bg-white p-3 rounded-lg shadow-md flex flex-col";
 
-    const safePidAttr = pid ? `data-id="${pid}"` : '';
+    
+    const safePidAttr = `data-id="${pid}"`;
+
 
     card.innerHTML = `
       <img class="w-full h-44 object-cover rounded-t-lg" src="${img}" alt="${name}">
@@ -56,7 +57,7 @@ function renderPlants(plants) {
   });
 }
 
-// --- Update Cart UI ---
+//Update Cart UI 
 function updateCartUI() {
   cartContainer.innerHTML = '';
   let total = 0;
@@ -87,7 +88,7 @@ function updateCartUI() {
   cartTotalEl.innerHTML = `<i class="fa-solid fa-bangladeshi-taka-sign"></i> <span class="font-semibold">${total}</span>  `;
 }
 
-// --- Normalize API response ---
+//Normalize API response 
 function normalizePlantsResponse(data) {
   if (!data) return [];
   if (Array.isArray(data)) return data;
@@ -98,7 +99,7 @@ function normalizePlantsResponse(data) {
   return [];
 }
 
-// --- Load all plants ---
+// Load all plants 
 function loadAllPlants() {
   plantContainer.innerHTML = `
     <div class="col-span-full flex justify-center mb-4">
@@ -118,13 +119,10 @@ function loadAllPlants() {
       const arr = normalizePlantsResponse(data);
       renderPlants(arr);
     })
-    .catch(err => {
-      plantContainer.innerHTML = '<p class="p-4 text-center text-red-500">Failed to load plants.</p>';
-      console.error(err);
-    });
+
 }
 
-// --- Load plants by category id ---
+//Load plants by category id 
 function loadCategory(id) {
   plantContainer.innerHTML = `
     <div class="col-span-full flex justify-center mb-4">
@@ -144,13 +142,10 @@ function loadCategory(id) {
       const arr = normalizePlantsResponse(json);
       renderPlants(arr);
     })
-    .catch(err => {
-      plantContainer.innerHTML = '<p class="p-4 text-center text-red-500">Failed to load category.</p>';
-      console.error(err);
-    });
+   
 }
 
-// --- Load categories ---
+// Load categories 
 function loadCategories() {
   fetch('https://openapi.programming-hero.com/api/categories')
     .then(res => res.json())
@@ -163,11 +158,11 @@ function loadCategories() {
       allLi.className = "hover:bg-green-500 text-black font-semibold px-4 py-2 rounded cursor-pointer transition duration-200";
       categoryContainer.appendChild(allLi);
 
-      const cats = json.categories || json.data || [];
-      (Array.isArray(cats) ? cats : []).forEach(cat => {
+      const cats = json.categories ;
+      cats.forEach(cat => {
         const li = document.createElement('li');
-        li.textContent = cat.category_name || cat.name || 'Unnamed';
-        li.dataset.id = cat.id ?? cat.category_id ?? cat._id ?? '';
+        li.textContent = cat.category_name;
+        li.dataset.id = cat.id ;
         li.className = "hover:bg-green-500 text-black font-semibold px-4 py-2 rounded cursor-pointer transition duration-200";
         categoryContainer.appendChild(li);
       });
@@ -175,10 +170,7 @@ function loadCategories() {
       if (categoryContainer.firstElementChild) categoryContainer.firstElementChild.classList.add('bg-green-500','text-white');
       loadAllPlants();
     })
-    .catch(err => {
-      categoryContainer.innerHTML = '<li class="text-red-500">Failed to load categories</li>';
-      console.error(err);
-    });
+   
 
   categoryContainer.addEventListener('click', (e) => {
     const li = e.target.closest('li');
@@ -192,7 +184,7 @@ function loadCategories() {
   });
 }
 
-// ---------------- Modal: fetch & show plant details ----------------
+// Modal
 function extractPlantObject(json) {
   const raw = json.plants;
   return Array.isArray(raw) ? raw[0] : raw;
@@ -229,11 +221,11 @@ function openPlantModal(id) {
     });
 }
 
-// Open modal on plant name click
+// Open modal 
 plantContainer.addEventListener('click', e => {
   const el = e.target.closest('h3[data-id]');
   if (el) openPlantModal(el.getAttribute('data-id'));
 });
 
-// ---------------- Start ----------------
-loadCategories();
+//Start
+loadCategories();          
