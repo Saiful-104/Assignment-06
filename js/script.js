@@ -1,11 +1,12 @@
-// js/script.js
-
 const categoryContainer = document.getElementById('category-container');
 const plantContainer = document.getElementById('plant-container');
+const cartContainer = document.getElementById('cart-items');
+const cartTotalEl = document.getElementById('cart-total');
+let cart = []; // store cart items
 
 // --- render plant cards ---
 function renderPlants(plants) {
-  plantContainer.innerHTML = '';
+  plantContainer.innerHTML = ''; // clear first
   if (!plants || plants.length === 0) {
     plantContainer.innerHTML = '<p class="p-4 text-center text-gray-500">No plants found.</p>';
     return;
@@ -16,17 +17,14 @@ function renderPlants(plants) {
     const name = plant.name || plant.plant_name || 'Unknown';
     let desc = plant.description || plant.short_description || '';
     const cat = plant.category || plant.category_name || 'Unknown';
-    const price = (plant.price !== undefined && plant.price !== null) ? plant.price : '—';
-
-    // Ensure we get id (id, _id, plant_id)
+    const price = (plant.price !== undefined && plant.price !== null) ? plant.price : 0;
     const pid = plant.id ?? plant._id ?? plant.plant_id ?? null;
 
     if (desc.length > 80) desc = desc.substring(0, 80) + '...';
 
     const card = document.createElement('div');
-    card.className = "w-full bg-white p-3 rounded-lg shadow-md flex flex-col";
+    card.className = "w-full h-[420px] bg-white p-3 rounded-lg shadow-md flex flex-col";
 
-    // NOTE: data-id on <h3> is required so modal knows which id to fetch.
     const safePidAttr = pid ? `data-id="${pid}"` : '';
 
     card.innerHTML = `
@@ -43,55 +41,91 @@ function renderPlants(plants) {
         </button>
       </div>
     `;
+
+    // --- Add to Cart ---
+    const addToCartBtn = card.querySelector('button');
+    addToCartBtn.addEventListener('click', () => {
+      const existing = cart.find(item => item.id === pid);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ id: pid, name: name, price: price, quantity: 1 });
+      }
+      updateCartUI();
+    });
+
     plantContainer.appendChild(card);
   });
 }
 
-// helper to normalize plant-list response to array
+// --- Update Cart UI ---
+function updateCartUI() {
+  cartContainer.innerHTML = '';
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+
+    const div = document.createElement('div');
+    div.className = 'flex justify-between items-center bg-green-50 p-2 gap-2 rounded';
+    div.innerHTML = `
+      <div>
+        <h4 class="font-bold">${item.name}</h4>
+        <p class="text-gray-500"><i class="fa-solid fa-bangladeshi-taka-sign"></i>${item.price} <span>x ${item.quantity}</span></p>
+      </div>
+      <div>
+        <i class="fa-solid fa-x text-gray-400 cursor-pointer remove-cart-item"></i>
+      </div>
+    `;
+
+    div.querySelector('.remove-cart-item').addEventListener('click', () => {
+      cart = cart.filter(x => x.id !== item.id);
+      updateCartUI();
+    });
+
+    cartContainer.appendChild(div);
+  });
+
+  // Update total with Taka icon
+  cartTotalEl.innerHTML = `<i class="fa-solid fa-bangladeshi-taka-sign"></i>${total}`;
+}
+
+// --- Normalize API response ---
 function normalizePlantsResponse(data) {
-  // common shapes:
-  // { plants: [...] } or { data: [...] } or { plants: {...} } single object
   if (!data) return [];
   if (Array.isArray(data)) return data;
   if (data.plants && Array.isArray(data.plants)) return data.plants;
   if (data.data && Array.isArray(data.data)) return data.data;
-  // if single plant object
   if (data.plants && typeof data.plants === 'object') return [data.plants];
   if (data.data && typeof data.data === 'object') return [data.data];
   return [];
 }
 
-// --- load all plants ---
+// --- Load all plants ---
 function loadAllPlants() {
   plantContainer.innerHTML = '<p class="p-4 text-center">Loading...</p>';
   fetch('https://openapi.programming-hero.com/api/plants')
     .then(res => res.json())
-    .then(data => {
-      const arr = normalizePlantsResponse(data);
-      renderPlants(arr);
-    })
+    .then(data => renderPlants(normalizePlantsResponse(data)))
     .catch(err => {
       plantContainer.innerHTML = '<p class="p-4 text-center text-red-500">Failed to load plants.</p>';
       console.error(err);
     });
 }
 
-// --- load plants by category id ---
+// --- Load category ---
 function loadCategory(id) {
   plantContainer.innerHTML = '<p class="p-4 text-center">Loading...</p>';
   fetch(`https://openapi.programming-hero.com/api/category/${encodeURIComponent(id)}`)
     .then(res => res.json())
-    .then(json => {
-      const arr = normalizePlantsResponse(json);
-      renderPlants(arr);
-    })
+    .then(json => renderPlants(normalizePlantsResponse(json)))
     .catch(err => {
       plantContainer.innerHTML = '<p class="p-4 text-center text-red-500">Failed to load category.</p>';
       console.error(err);
     });
 }
 
-// --- load categories ---
+// --- Load categories ---
 function loadCategories() {
   fetch('https://openapi.programming-hero.com/api/categories')
     .then(res => res.json())
@@ -133,13 +167,10 @@ function loadCategories() {
   });
 }
 
-// ---------------- Modal: fetch & show plant details ----------------
-
-// extract single plant object from multiple possible response shapes
+// ---------------- Modal ----------------
 function extractPlantObject(json) {
-  const raw = json.plants || json.data || json.plant || json;
-  if (Array.isArray(raw)) return raw[0] || {};
-  return (raw && typeof raw === 'object') ? raw : {};
+  const raw = json.plants;
+  return Array.isArray(raw) ? raw[0] : raw;
 }
 
 function openPlantModal(id) {
@@ -149,7 +180,6 @@ function openPlantModal(id) {
 
   container.innerHTML = `<div class="p-6 text-center"><p class="font-semibold">Loading...</p></div>`;
 
-  // open dialog (with fallback if dialog not supported)
   if (typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute('open','');
 
@@ -157,85 +187,29 @@ function openPlantModal(id) {
     .then(res => res.json())
     .then(json => {
       const p = extractPlantObject(json);
-
-      const img = p.image || p.image_url || 'assets/about.png';
-      const name = p.name || 'Unknown Plant';
-      const category = p.category || p.category_name || 'Unknown';
-      const price = (p.price !== undefined && p.price !== null) ? p.price : '—';
-      const description = p.description || p.full_description || 'No description available.';
-
-      // modal content in requested order: Name -> Image -> Category -> Price -> Description
       container.innerHTML = `
         <div class="p-4">
-          <div class="flex justify-between items-start">
-            <h3 class="text-xl font-bold">${name}</h3>
-            <button id="plant_modal_close" class="text-gray-600 hover:text-gray-900">✕</button>
-          </div>
-
+          <h3 class="text-xl font-bold">${p.name}</h3>
           <div class="mt-3">
-            <img src="${img}" alt="${name}" class="w-full h-44 md:h-56 object-cover rounded-md" />
+            <img src="${p.image}" alt="${p.name}" class="w-full h-44 md:h-56 object-cover rounded-md" />
           </div>
-            
-             <h3 class=" mt-2 text-sm font-bold">Categories:<span class=" font-semibold text-[14px] text-gray-700 px-1 py-1 rounded-full">${category}</span></h3>
-           
-            <h3 class=" mt-2 text-sm font-bold"> Price: <span class=" font-semibold text-[15px] text-gray-700 px-1 py-1 rounded-full"> ৳${price}</span>
-           </h3>
-
-         
-           <h3 class=" mt-2 text-sm font-bold">Description:<span class=" font-semibold text-[12px] text-gray-700 px-1 py-1 rounded-full">${description}</span></h3>
-
+          <h3 class="mt-2 text-sm font-bold">Categories: <span class="font-semibold text-[14px] text-gray-700 px-1 py-1 rounded-full">${p.category}</span></h3>
+          <h3 class="mt-2 text-sm font-bold">Price: <span class="font-semibold text-[15px] text-gray-700 px-1 py-1 rounded-full">৳${p.price}</span></h3>
+          <h3 class="mt-2 text-sm font-bold">Description: <span class="font-semibold text-[12px] text-gray-700 px-1 py-1 rounded-full">${p.description}</span></h3>
           <div class="mt-6 text-right">
             <button id="plant_modal_close_btn" class="px-2 py-1 rounded-lg bg-gray-200 hover:bg-gray-300">Close</button>
           </div>
         </div>
       `;
-
-      const closeBtnTop = document.getElementById('plant_modal_close');
-      const closeBtnBottom = document.getElementById('plant_modal_close_btn');
-
-      function closeDialog() {
-        if (typeof dialog.close === "function") dialog.close();
-        else dialog.removeAttribute('open');
-      }
-
-      closeBtnTop && closeBtnTop.addEventListener('click', closeDialog);
-      closeBtnBottom && closeBtnBottom.addEventListener('click', closeDialog);
-    })
-    .catch(err => {
-      container.innerHTML = `
-        <div class="p-6 text-center">
-          <p class="text-red-500 font-semibold">Failed to load details</p>
-          <div class="mt-4">
-            <button id="plant_modal_close_err" class="px-4 py-2 rounded bg-gray-200">Close</button>
-          </div>
-        </div>
-      `;
-      const dialogCloseErr = document.getElementById('plant_modal_close_err');
-      dialogCloseErr && dialogCloseErr.addEventListener('click', () => {
-        if (typeof dialog.close === "function") dialog.close();
-        else dialog.removeAttribute('open');
-      });
-      console.error('Plant detail fetch error:', err);
+      document.getElementById('plant_modal_close_btn').addEventListener('click', () => dialog.close());
     });
 }
 
-// delegate click on plant name to open modal
-plantContainer.addEventListener('click', (e) => {
-  const nameEl = e.target.closest('h3[data-id]');
-  if (!nameEl) return;
-  const id = nameEl.getAttribute('data-id');
-  if (id) openPlantModal(id);
+// Open modal on plant name click
+plantContainer.addEventListener('click', e => {
+  const el = e.target.closest('h3[data-id]');
+  if (el) openPlantModal(el.getAttribute('data-id'));
 });
 
-// close modal on ESC
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    const dialog = document.getElementById('plant_modal');
-    if (!dialog) return;
-    if (typeof dialog.close === "function") dialog.close();
-    else dialog.removeAttribute('open');
-  }
-});
-
-// start
+// --- Start ---
 loadCategories();

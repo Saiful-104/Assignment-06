@@ -3,71 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assingnment 06</title>
+    <title>Assignment 06</title>
 
-    <!-- font awesome -->
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-   
-     <!-- daisyui and tailwind -->
-      <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-      
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
-     
-    <!-- header -->
-     <header>
-        <div class="navbar bg-green-600 shadow-sm">
-  <div class="navbar-start">
-    <div class="dropdown">
-      <div tabindex="0"  class="  hover:text-white transition-colors duration-300 ml-5 lg:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+      
+<header>
+  <div class="navbar bg-green-600 shadow-sm">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <div tabindex="0" class="hover:text-white transition-colors duration-300 ml-5 lg:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /> 
+          </svg>
+        </div>
+        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow">
+          <li><a>About</a></li>
+          <li><a>Gallery</a></li>
+          <li><a>Plant a Tree</a></li>
+        </ul>
       </div>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow">
-        <li><a>About</a></li>
-       <li><a>Gallery</a></li>
-        <li><a>Plant a Tree</a></li>
+      <a href="#" class="ml-5 text-2xl text-white hover:text-gray-900 transition-colors duration-300">
+        Green Earth
+      </a>
+    </div>
+
+    <div class="navbar-center hidden lg:flex">
+      <ul class="flex space-x-6 text-white">
+        <li><a href="#" class="hover:text-gray-800 transition-colors duration-300">About</a></li>
+        <li><a href="#" class="hover:text-gray-800 transition-colors duration-300">Gallery</a></li>
+        <li><a href="#" class="hover:text-gray-800 transition-colors duration-300">Plant a Tree</a></li>
       </ul>
     </div>
-    <!-- <a class="btn btn-ghost text-xl text-white">Green Earth</a> -->
-     <a href="#" class=" ml-5 text-2xl text-white hover:text-gray-900 transition-colors duration-300">
-  Green Earth
-</a>
 
-
-  </div>
-  <div class="navbar-center hidden lg:flex">
-   <ul class="flex space-x-6 text-white">
-  <li><a href="#" class="hover:text-gray-800 transition-colors duration-300">About</a></li>
-  <li><a href="#" class="hover:text-gray-800 transition-colors duration-300">Gallery</a></li>
-  <li><a href="#" class="hover:text-gray-800 transition-colors duration-300">Plant a Tree</a></li>
-</ul>
-
-  </div>
     <div class="navbar-end">
-  <a href="#" class="bg-yellow-300 text-green-800 px-6 py-2 text-lg rounded-full font-semibold hover:bg-yellow-300 hover:text-green-900 transition-colors duration-300">
-    Plant a Tree
-  </a>
-</div>
+      <a href="#" class="bg-yellow-300 text-green-800 px-6 py-2 text-lg rounded-full font-semibold hover:bg-yellow-300 hover:text-green-900 transition-colors duration-300">
+        Plant a Tree
+      </a>
+    </div>
+  </div>
+</header>
 
-</div>
-     </header>
-    <!-- banner -->
-
-    
-  <section class="bg-green-100">
+<section class="bg-green-100">
   <div class="flex justify-between items-center">
-    <!-- Left Image -->
     <div class="hidden md:block">
       <img class="w-11/12" src="assets/hero-leaf1.png" alt="">
     </div>
 
-    <!-- Text & Button -->
     <div class="text-center px-4">
       <h2 class="text-2xl font-bold">Plant a Tree, Grow a Future</h2>
       <p class="text-gray-500 mt-2">
@@ -78,60 +66,51 @@
       </button>
     </div>
 
-    <!-- Right Image -->
     <div class="hidden md:block">
       <img class="w-11/12" src="assets/hero-leaf1.png" alt="">
     </div>
   </div>
 </section>
 
-   <!-- choose your tree -->
-    
-   <section class="bg-green-50 py-10">
+<section class="bg-green-50 py-10">
   <div class="container mx-auto px-4 flex flex-col lg:flex-row justify-center gap-6">
     
+    <!-- Categories & Plants -->
     <div class="w-full lg:w-3/4 flex flex-col md:flex-row gap-6">
-      
       <div class="w-full md:w-1/4">
         <h2 class="font-bold text-lg mb-4 text-gray-800">Categories</h2>
-        <!-- <p class="mb-2 hover:bg-green-500 text-black font-semibold px-4 py-2 rounded cursor-pointer transition duration-200">All Trees</p> -->
         <ul id="category-container" class="space-y-2 text-black">
           <li>Ornamental Plant</li>
-           <li>Bamboo</li>
-           <li>Climber</li>
-           <li>Aquatic Plant</li>
+          <li>Bamboo</li>
+          <li>Climber</li>
+          <li>Aquatic Plant</li>
         </ul>
       </div>
 
       <div id="plant-container" class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        </div>
-
+        <!-- Plants will load here -->
+      </div>
     </div>
 
+    <!-- Cart -->
     <div class="bg-white p-3 rounded-xl w-full lg:w-1/4">
       <h1 class="font-bold">Your Cart</h1>
-      <div class="flex justify-between items-center bg-green-50 p-2 gap-2 mt-4">
-        <div>
-          <h4 class="font-bold">Mango Tree</h4>
-          <p class="text-gray-500"><i class="fa-solid fa-bangladeshi-taka-sign"></i>500 <span>x 1</span></p>
-        </div>
-        <div>
-          <i class="fa-solid fa-x text-gray-400 cursor-pointer"></i>
-        </div>
+      <div id="cart-items" class="mt-4 space-y-2">
+        <!-- Cart items added here -->
+      </div>
+      <div class="flex justify-between items-center">
+         <h3 class="font-bold mt-3">Total: </h3>
+         <span id="cart-total"><i class="fa-solid fa-bangladeshi-taka-sign"></i>0</span>
       </div>
     </div>
 
   </div>
-</section>           
-       
-   <!-- modal (dialog) -->
-<dialog id="plant_modal" class="p-0 rounded-lg shadow-xl backdrop:bg-black backdrop:opacity-50">
-  <div id="modal-content-container" class="bg-white rounded-lg w-full max-w-md relative p-0">
-    <!-- content injected by JS -->
-  </div>
+</section>
+
+<dialog id="plant_modal" class="modal">
+  <div id="modal-content-container" class="modal-box p-0"></div>
 </dialog>
- 
-   
-     <script src="js/script.js"></script>
+
+<script src="js/script.js"></script>
 </body>
 </html>
