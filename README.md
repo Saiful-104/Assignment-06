@@ -17,6 +17,7 @@ const
   Hoisted, but exists in a temporal dead zone (TDZ) until declared.
 
   // Ans-2 
+
  map()
   Returns a new array with the results of applying a function to each element.
   Does not modify the original array.
@@ -31,6 +32,7 @@ filter()
   Does not modify the original array.
 
   // Ans-3
+  
 Arrow Functions in ES6
   Arrow functions provide a shorter syntax to define functions.
 
