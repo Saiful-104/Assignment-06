@@ -1,4 +1,4 @@
- <!-- Ans-1 -->
+// Ans-1
 
  var
   Function-scoped (accessible within the function it is declared in).
@@ -16,7 +16,7 @@ const
   Cannot be redeclared in the same scope.
   Hoisted, but exists in a temporal dead zone (TDZ) until declared.
 
-  <!-- Ans-2 -->
+  // Ans-2 
  map()
   Returns a new array with the results of applying a function to each element.
   Does not modify the original array.
@@ -30,7 +30,7 @@ filter()
   Returns a new array containing only elements that satisfy a specified condition.
   Does not modify the original array.
 
-  <!-- Ana-3 -->
+  // Ans-3
 Arrow Functions in ES6
   Arrow functions provide a shorter syntax to define functions.
 
@@ -38,7 +38,7 @@ Arrow Functions in ES6
 
   Useful for writing concise and readable code, especially in callbacks or array methods.
 
-  <!-- Ana-4 -->
+  //Ans-4
 
 Destructuring Assignment in ES6
   Destructuring assignment allows you to extract values from arrays or objects into separate variables.
@@ -47,7 +47,7 @@ Destructuring Assignment in ES6
 
  Can be used with arrays, objects, function parameters, and even nested structures.
 
- <!-- Ans-5 -->
+ //Ans-5
 
  Template Literals in ES6
 
